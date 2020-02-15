@@ -13,20 +13,37 @@ pizzaSlice = 0;
 
 recursiveCheck(maxSlices - pizzaSlice, index);
 
+
+// initial approach
 function recursiveCheck(max, i) {
     if(i === 1) {
+        otherSum = pizzas[0] + pizzas[1];
         return;
     }
     if(pizzas[i] > max) {
         recursiveCheck(max, i - 1);
     } else {
+        recursiveCheck(max - pizzas[i], i - 1);
         if(max - pizzas[i] <= max - otherSum) {
             pizzaIndex.push(i);
             pizzaSlice += pizzas[i];
-            recursiveCheck(max - pizzas[i], i - 1);
         } else {
-
             otherSum += pizzas[i - 1];
         }
+    }
+}
+
+// different approach - array gets too big n blows up lol
+let initArr = [pizzas[0]];
+let newArr;
+rf(initArr, pizzas[1], 1)
+
+function rf(arr, val, i) {
+    let fArr = arr;
+    let sArr = arr.map(v => v + val).filter(v => v <= maxSlices);
+    newArr = fArr.concat(sArr);
+    console.log(i);
+    if(i !== index) {
+        rf(newArr, pizzas[i++], i++);
     }
 }
